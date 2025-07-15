@@ -90,3 +90,4 @@ fi
 
 # Optional: Clean up old wallpapers (keep last 5)
 find "$WALLPAPER_DIR" -name "amoled_wallpaper_*" -type f | sort -r | tail -n +6 | xargs -I {} rm {}
+Test Change
