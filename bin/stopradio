@@ -1,0 +1,6 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# Script to stop Nightride FM stream and display message
+# Save as ~/bin/stopradio
+
+pkill mpv >/dev/null 2>&1 && echo "Radio stopped." || echo "No radio playing."

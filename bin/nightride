@@ -1,0 +1,72 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# Script to play Nightride FM channels using mpv
+# Save as ~/bin/nightride
+
+if [ -z "$1" ]; then
+    echo "Usage: nightride <channel>"
+    echo "Available channels: horrorsynth, synthwave, rekt, rektory, rektify, chillsynth, datawave, spacesynth"
+    exit 1
+fi
+
+# Map channel names to Nightride FM streaming URLs and display names
+case "$1" in
+    horrorsynth)
+        URL="https://stream.rekt.network/horrorsynth.mp3"
+        DISPLAY_NAME="Horrorsynth on That 80's Guy"
+        ;;
+    synthwave|nightride)
+        URL="https://stream.rekt.network/nightride.mp3"
+        DISPLAY_NAME="Synthwave on Nightride FM"
+        ;;
+    rekt)
+        URL="https://stream.rekt.network/rekt.mp3"
+        DISPLAY_NAME="Rekt on Nightride FM"
+        ;;
+    rektory)
+        URL="https://stream.rekt.network/rektory.mp3"
+        DISPLAY_NAME="Rektory on Nightride FM"
+        ;;
+    rektify)
+        URL="https://stream.rekt.network/rektify.mp3"
+        DISPLAY_NAME="Rektify on Nightride FM"
+        ;;
+    chillsynth)
+        URL="https://stream.rekt.network/chillsynth.mp3"
+        DISPLAY_NAME="Chillsynth on Nightride FM"
+        ;;
+    datawave)
+        URL="https://stream.rekt.network/datawave.mp3"
+        DISPLAY_NAME="Datawave on Nightride FM"
+        ;;
+    spacesynth)
+        URL="https://stream.rekt.network/spacesynth.mp3"
+        DISPLAY_NAME="Spacesynth on Nightride FM"
+        ;;
+    *)
+        echo "Unknown channel: $1"
+        echo "Available channels: horrorsynth, synthwave, rekt, rektory, rektify, chillsynth, datawave, spacesynth"
+        exit 1
+        ;;
+esac
+
+# Print custom output
+echo "Now Playing: $DISPLAY_NAME"
+
+# Check if mpv is already running for this stream
+if pgrep -f "mpv.*$URL" >/dev/null; then
+    echo "Stream already playing."
+    exit 0
+fi
+
+# Play the stream using mpv with no video, in the background
+mpv --no-video --quiet "$URL" > /dev/null 2>&1 &
+MPV_PID=$!
+
+# Wait briefly to check if mpv started successfully
+sleep 5
+if ! ps -p $MPV_PID > /dev/null; then
+    echo "Stream unavailable. Nightride FM may not be streaming this channel."
+    ~/bin/stopradio
+    exit 1
+fi
